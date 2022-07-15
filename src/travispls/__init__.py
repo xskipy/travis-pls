@@ -7,7 +7,7 @@ from datetime import timedelta
 import argparse
 import os
 import signal
-import subprocess
+import subprocess32
 import sys
 
 
@@ -40,7 +40,7 @@ def main():
         end_of_line = datetime.utcnow() + timedelta(seconds=args.max_timeout)
 
     # start the process
-    p = subprocess.Popen([args.command] + args.args)
+    p = subprocess32.Popen([args.command] + args.args)
 
     # setup signals
     signal.signal(signal.SIGTERM, lambda sig, frame: stop_process(p, sig))
@@ -50,7 +50,7 @@ def main():
             try:
                 p.wait(args.interval)
                 break
-            except subprocess.TimeoutExpired:
+            except subprocess32.TimeoutExpired:
                 if end_of_line and datetime.utcnow() > end_of_line:
                     # if we've timed out
                     log("ERROR: max timeout of {} seconds exceeded.".format(args.max_timeout),
